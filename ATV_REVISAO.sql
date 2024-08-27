@@ -61,3 +61,17 @@ INSERT INTO produtos (produto, preco, categoria_id) VALUES ('Leite', 5.80, 3);
 
 UPDATE produtos SET preco = preco * 1.3
 COMMIT
+
+SELECT * FROM produtos;
+
+INSERT INTO VENDAS (CLIENTE_ID, TOTAL) 
+	SELECT 1, PRECO FROM PRODUTOS
+	WHERE ID = 1;
+	
+INSERT INTO VENDAS (CLIENTE_ID, TOTAL) 
+	SELECT 1, PRECO FROM PRODUTOS
+	WHERE ID = 4;
+
+SELECT clientes.nome, telefones.telefone 
+	FROM telefones 
+	INNER JOIN clientes ON telefones.CLIENTE_ID = clientes.id;
