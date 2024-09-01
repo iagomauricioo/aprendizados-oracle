@@ -89,13 +89,15 @@ GRANT SELECT, UPDATE ON noticias TO revisor;
 
 
 
-SELECT noticias.titulo, noticias.descricao, 
+CREATE VIEW noticias_vw AS SELECT noticias.titulo, noticias.descricao, 
 	noticias.DATA_DE_POSTAGEM AS data_postagem, secoes.secao, 
 	autores.nome AS AUTOR
 	FROM noticias
 	INNER JOIN secoes ON SECOES.ID = noticias.SECAO_ID
 	INNER JOIN autores ON autores.id = noticias.AUTOR_ID
 	ORDER BY noticias.descricao;
+
+SELECT * FROM NOTICIAS_VW;
 	
 
 
