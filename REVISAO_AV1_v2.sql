@@ -28,6 +28,8 @@ CREATE TABLE noticias (
 	secao_id NUMBER REFERENCES secoes(id)
 );
 
+SELECT * FROM NOTICIAS;
+
 CREATE SEQUENCE autor_id;
 CREATE TABLE autores (
 	id NUMBER DEFAULT autor_id.nextval PRIMARY KEY,
@@ -52,3 +54,48 @@ INSERT INTO noticias (titulo, descricao, data_de_postagem, secao_id, autor_id)
 		 	  VALUES ('Pavê de limão', 'Descrição 4', '28/11/2015', 1, 1);		 	  
 INSERT INTO noticias (titulo, descricao, data_de_postagem, secao_id, autor_id) 
 		 	  VALUES ('Acabando espinhas', 'Descrição 5', '22/04/2009', 2, 2);
+
+	 	  
+SELECT secoes.secao, noticias.data_de_postagem 
+	FROM noticias 
+	INNER JOIN secoes ON secoes(id) = noticias.secao_id;
+
+-- Questão 2
+
+CREATE INDEX idx_data_noticia ON noticias(data_de_postagem);
+
+EXPLAIN PLAN FOR
+SELECT *
+FROM noticias
+WHERE data_de_postagem = '22/04/2009';
+
+SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);
+
+SELECT secoes.secao, noticias.data_de_postagem 
+	FROM noticias 
+	INNER JOIN secoes ON noticias.secao_id = secoes.id
+	WHERE DATA_DE_POSTAGEM = '22/04/2009';
+
+-- Questão 3
+
+--parte 1
+CREATE USER adm IDENTIFIED BY "1234";
+GRANT ALL PRIVILEGES TO adm;
+
+--parte 2
+CREATE USER revisor IDENTIFIED BY "123456";
+GRANT SELECT, UPDATE ON noticias TO revisor;
+
+
+
+
+SELECT noticias.titulo, noticias.descricao, 
+	noticias.DATA_DE_POSTAGEM AS data_postagem, secoes.secao, 
+	autores.nome AS AUTOR
+	FROM noticias
+	INNER JOIN secoes ON SECOES.ID = noticias.SECAO_ID
+	INNER JOIN autores ON autores.id = noticias.AUTOR_ID
+	ORDER BY noticias.descricao;
+	
+
+
