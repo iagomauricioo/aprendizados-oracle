@@ -119,3 +119,15 @@ END;
 SELECT * FROM USUARIOS;
 SELECT * FROM BACKUP_USUARIOS;
 UPDATE USUARIOS SET NOME = 'João' WHERE ID = 3;
+
+CREATE OR REPLACE TRIGGER erros 
+BEFORE INSERT OR UPDATE ON USUARIOS
+FOR EACH ROW
+BEGIN
+	IF :NEW.idade < 0 THEN
+		raise_application_error(-20000, 'Mensagem de erro');
+	END IF;
+END;
+
+INSERT INTO usuarios (nome, idade) VALUES ('Yann', 26);
+INSERT INTO usuarios (nome, idade) VALUES ('Yann', -1);
