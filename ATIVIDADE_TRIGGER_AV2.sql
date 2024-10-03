@@ -73,3 +73,15 @@ BEGIN
 		:NEW.salario := 10000;
 	END IF;
 END;
+
+--4º Questão
+CREATE OR REPLACE TRIGGER atualizar_qtd_funcionarios
+BEFORE INSERT OR DELETE ON empregados
+FOR EACH ROW 
+BEGIN
+	IF INSERTING THEN
+		UPDATE SETORES s SET total_funcionarios = total_funcionarios + 1 WHERE :NEW.setor_id = s.id;
+	ELSE
+		UPDATE SETORES s SET total_funcionarios = total_funcionarios - 1 WHERE :OLD.setor_id = s.id;
+	END IF;
+END;
