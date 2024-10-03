@@ -103,3 +103,10 @@ BEGIN
 	END IF;
 END;
 
+--6º e última
+CREATE OR REPLACE TRIGGER atualizar_nome_logs
+BEFORE UPDATE ON logs_empregados
+FOR EACH ROW
+BEGIN
+	raise_application_error(-20100, 'Não é possível alterar a tabela de logs, seu danadinho, tá devendo né');
+END; 
