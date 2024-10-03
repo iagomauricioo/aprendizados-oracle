@@ -10,7 +10,6 @@ create table setores (
 	total_funcionarios number default(0)
 );
 
-
 insert into setores (setor) values ('RH');
 insert into setores (setor) values ('Financeiro');
 insert into setores (setor) values ('Acadêmico');
@@ -26,8 +25,6 @@ create table empregados (
 	setor_id number references setores(id)
 );
 
-
-
 insert into empregados (nome, salario, setor_id) values ('Arthur', 2314.50, 1);
 insert into empregados (nome, salario, setor_id) values ('Alice', 3000.00, 1);
 insert into empregados (nome, salario, setor_id) values ('Sophia', 1500.00, 2);
@@ -39,9 +36,6 @@ insert into empregados (nome, salario, setor_id) values ('Lais', 3450.30, 4);
 insert into empregados (nome, salario, setor_id) values ('Monica', 3333.33, 5);
 insert into empregados (nome, salario, setor_id) values ('Eduardo', 1543.00, 5);
 
-
-
-
 ------ LOGS --------
 create table logs_empregados (
 	empregado_id number,
@@ -49,3 +43,33 @@ create table logs_empregados (
 	operacao varchar2(200),
 	data_operacao timestamp
 );
+
+--1º Questão
+CREATE OR REPLACE TRIGGER funcionarios_zero
+BEFORE INSERT ON setores
+FOR EACH ROW
+BEGIN
+	:NEW.total_funcionarios := 0;
+END;
+
+--2º Questão
+CREATE OR REPLACE TRIGGER salario_sempre_positivo
+BEFORE INSERT OR UPDATE ON empregados
+FOR EACH ROW 
+BEGIN
+	IF :NEW.salario < 0 THEN
+		raise_application_error(20001, 'Salário negativo não é permitido!');
+	END IF;
+END;
+
+--3º Questão
+CREATE OR REPLACE TRIGGER salario_menor_937_maior_10000
+BEFORE INSERT OR UPDATE ON empregados
+FOR EACH ROW 
+BEGIN
+	IF :NEW.salario < 937 THEN
+		:NEW.salario := 937;
+	ELSIF :NEW.salario > 10000 THEN
+		:NEW.salario := 10000;
+	END IF;
+END;
