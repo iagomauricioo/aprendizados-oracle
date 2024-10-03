@@ -85,3 +85,21 @@ BEGIN
 		UPDATE SETORES s SET total_funcionarios = total_funcionarios - 1 WHERE :OLD.setor_id = s.id;
 	END IF;
 END;
+
+--5º Questão
+CREATE OR REPLACE TRIGGER backupEmpregados
+BEFORE INSERT OR UPDATE OR DELETE ON empregados
+FOR EACH ROW
+BEGIN
+	IF INSERTING THEN
+		INSERT INTO LOGS_EMPREGADOS le 
+			VALUES (:NEW.id, USER, 'Inserindo usuário', SYSTIMESTAMP);
+	ELSIF UPDATING THEN
+		INSERT INTO LOGS_EMPREGADOS le 
+			VALUES (:OLD.id, USER, 'Atualizando usuário', SYSTIMESTAMP);
+	ELSE
+		INSERT INTO LOGS_EMPREGADOS le 
+			VALUES (:OLD.id, USER, 'Deletando usuário', SYSTIMESTAMP);
+	END IF;
+END;
+
